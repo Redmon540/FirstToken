@@ -11,4 +11,3 @@ rev = 'testnet'
 subdir = 'aptos-move/framework/aptos-framework'
 [addresses]
 admin = '0x9b2a708467f204a30d36a81ecde5c61b14735667cda37d35d11e0c575aba4066'
-aptos_framework = "0x1"
