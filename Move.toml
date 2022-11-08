@@ -1,5 +1,5 @@
 [package]
-name = 'first-token'
+name = 'nft'
 version = '1.0.0'
 [dependencies.AptosToken]
 git = 'https://github.com/aptos-labs/aptos-core.git'
@@ -10,4 +10,4 @@ git = 'https://github.com/aptos-labs/aptos-core.git'
 rev = 'testnet'
 subdir = 'aptos-move/framework/aptos-framework'
 [addresses]
-admin = '0x9b2a708467f204a30d36a81ecde5c61b14735667cda37d35d11e0c575aba4066'
+admin = '0xf5f35a1e94fb3af106bba24eb6aa9ddf7c34513275d209e152994942a888dd57'

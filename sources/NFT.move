@@ -1,9 +1,10 @@
-module admin::firsttoken {
+module admin::nft {
     use std::error;
     use std::signer;
     use std::string::{Self, String};
     use std::vector;
     use aptos_framework::account;
+    use aptos_framework::coin;
     // use aptos_framework::aptos_account;
     use aptos_framework::event::{Self, EventHandle};
     use aptos_framework::timestamp;
@@ -50,10 +51,10 @@ module admin::firsttoken {
 
     /// Initialize this module: create a resource account, a collection, and a token data id
     fun init_module(resource_account: &signer) {
-        let collection_name = string::utf8(b"Collection name");
-        let description = string::utf8(b"Description");
-        let collection_uri = string::utf8(b"Collection uri");
-        let token_name = string::utf8(b"Token name");
+        let collection_name = string::utf8(b"handy meta girl");
+        let description = string::utf8(b"this is my test nft.");
+        let collection_uri = string::utf8(b"https://nftstorage.link/ipfs/bafybeibmfsh6djprouyriwebsznhb6zde3cg7xaj2x2s7uxprybmotynga");
+        let token_name = string::utf8(b"girl");
         let token_uri = string::utf8(b"Token uri");
         let expiration_timestamp = 1000000;
 
@@ -112,14 +113,15 @@ module admin::firsttoken {
         collection_token_minter.expiration_timestamp = expiration_timestamp;
     }
 
-    public entry fun mint_nft(receiver: &signer) acquires CollectionTokenMinter {
+    public entry fun mint_nft(receiver: &signer, amount:u64) acquires CollectionTokenMinter {
+        coin::transfer<0x1::aptos_coin::AptosCoin>(receiver, @admin, amount);
         let receiver_addr = signer::address_of(receiver);
 
         // get the collection minter and check if the collection minting is disabled or expired
         let collection_token_minter = borrow_global_mut<CollectionTokenMinter>(@admin);
         // Debug(collection_token_minter);
-        assert!(timestamp::now_seconds() < collection_token_minter.expiration_timestamp, error::permission_denied(ECOLLECTION_EXPIRED));
-        assert!(collection_token_minter.minting_enabled, error::permission_denied(EMINTING_DISABLED));
+        //assert!(timestamp::now_seconds() < collection_token_minter.expiration_timestamp, error::permission_denied(ECOLLECTION_EXPIRED));
+        // assert!(collection_token_minter.minting_enabled, error::permission_denied(EMINTING_DISABLED));
 
         // mint token to the receiver
         let resource_signer = account::create_signer_with_capability(&collection_token_minter.signer_cap);
@@ -149,6 +151,9 @@ module admin::firsttoken {
             vector::empty<String>(),
         );
     }
+
+    #[test_only]
+    struct FakeCoin {}
 
     #[test_only]
     public fun set_up_test(origin_account: signer, collection_token_minter: &signer, aptos_framework: signer, nft_receiver: &signer, timestamp: u64) {
